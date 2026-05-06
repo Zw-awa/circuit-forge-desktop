@@ -1,0 +1,82 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.overlay-root {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.overlay-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+}
+
+.ctx-menu {
+  position: fixed;
+  min-width: 180px;
+  padding: 4px;
+  background: rgba(28, 28, 32, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  color: #f0f0f0;
+  font-size: 13px;
+  z-index: 1000;
+  user-select: none;
+}
+
+.ctx-section-title {
+  padding: 6px 10px 2px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ctx-item {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  text-align: left;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.ctx-item:hover {
+  background: rgba(100, 180, 255, 0.18);
+}
+
+.ctx-exit {
+  color: rgba(255, 150, 150, 0.95);
+}
+
+.ctx-exit:hover {
+  background: rgba(220, 70, 70, 0.25);
+}
+
+.ctx-separator {
+  height: 1px;
+  margin: 4px 8px;
+  background: rgba(255, 255, 255, 0.08);
+}

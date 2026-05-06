@@ -1,0 +1,80 @@
+.toolbar-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(28, 28, 32, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  color: #f0f0f0;
+  font-size: 13px;
+  user-select: none;
+}
+
+.tb-grab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 32px;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: grab;
+  font-size: 12px;
+  letter-spacing: -1px;
+  transition: color 0.15s;
+}
+
+.tb-grab:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.tb-grab:active {
+  cursor: grabbing;
+}
+
+.tb-grab.disabled {
+  cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tb-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tb-btn.active {
+  background: rgba(100, 180, 255, 0.25);
+  border-color: rgba(100, 180, 255, 0.5);
+}
+
+.tb-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+
+.tb-exit:hover {
+  background: rgba(220, 70, 70, 0.4);
+  border-color: rgba(220, 70, 70, 0.6);
+}
