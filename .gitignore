@@ -38,15 +38,20 @@ desktop.ini
 entities.json
 mempalace.yaml
 
-# Development design documents (developer-only, not for end users)
+# Internal design & handoff documents (not for public)
+HANDOFF.md
 docs/design/
+docs/TODO-future-plans.md
+
+# Backups
+backups/
 
 # Logs
 *.log
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-docs/TODO-future-plans.md
 CLAUDE.md

@@ -34,3 +34,21 @@ export const PINS: Record<GateKind, Pin[]> = {
   xnor: [{ kind: 'in', dx: -1, dy: -0.3 }, { kind: 'in', dx: -1, dy: 0.3 }, { kind: 'out', dx: 1, dy: 0 }],
   not:  [{ kind: 'in', dx: -1, dy: 0 }, { kind: 'out', dx: 1, dy: 0 }],
 };
+
+export interface PinWorldPos {
+  kind: 'in' | 'out';
+  x: number;
+  y: number;
+  pinIndex: number;
+}
+
+export const PIN_HIT_RADIUS = 0.35;
+
+export function getPinWorldPositions(kind: GateKind, cx: number, cy: number): PinWorldPos[] {
+  return (PINS[kind] || []).map((pin, i) => ({
+    kind: pin.kind,
+    x: cx + pin.dx,
+    y: cy + pin.dy,
+    pinIndex: i,
+  }));
+}

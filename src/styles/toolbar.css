@@ -66,6 +66,22 @@
   border-color: rgba(100, 180, 255, 0.5);
 }
 
+.tb-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tb-btn:disabled:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tb-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
 .tb-title {
   flex: 1;
   text-align: center;
