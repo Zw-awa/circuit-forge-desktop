@@ -3,6 +3,7 @@ import type { ComponentKind, PinWorldPos } from '../types/components';
 import { getPinWorldPositions } from '../types/components';
 import { addComponent, removeComponent, moveComponent as rustMove, addWire, removeWire } from '../ipc/circuitIpc';
 import type { RustPin } from '../ipc/circuitIpc';
+import { pushPlace, pushRemove, pushWire } from './historyStore';
 
 export interface Component {
   id: number;
@@ -81,6 +82,7 @@ export const useCircuitStore = create<CircuitState>((set, get) => ({
       components: [...s.components, { id: s.nextId, kind, x: wx, y: wy }],
       nextId: s.nextId + 1,
     }));
+    pushPlace(kind, wx, wy, newId);
     addComponent(kind, wx, wy)
       .then((res) => set((s) => ({
         components: s.components.map((c) =>
@@ -117,10 +119,11 @@ export const useCircuitStore = create<CircuitState>((set, get) => ({
 
   removeById: (id) => {
     const comp = get().components.find((c) => c.id === id);
-    const rustId = comp?.rustId;
-    const wireIds = get().wires
-      .filter((w) => (w.fromComponentId === id || w.toComponentId === id) && w.rustId != null)
-      .map((w) => w.rustId!);
+    if (!comp) return;
+    const relatedWires = get().wires.filter((w) => w.fromComponentId === id || w.toComponentId === id);
+    pushRemove({ ...comp }, relatedWires.map((w) => ({ ...w })));
+    const rustId = comp.rustId;
+    const wireIds = relatedWires.filter((w) => w.rustId != null).map((w) => w.rustId!);
     set((s) => ({
       components: s.components.filter((c) => c.id !== id),
       wires: s.wires.filter((w) => w.fromComponentId !== id && w.toComponentId !== id),
@@ -181,6 +184,8 @@ export const useCircuitStore = create<CircuitState>((set, get) => ({
       nextWireId: s.nextWireId + 1,
       placingWire: null,
     }));
+    const newWire = get().wires.find((w) => w.id === newId);
+    if (newWire) { pushWire({ ...newWire }); }
     const fromComp = get().components.find((c) => c.id === pw.fromComponentId);
     const fromRustPins = fromComp?.rustPins;
     const toRustPins = toComp.rustPins;

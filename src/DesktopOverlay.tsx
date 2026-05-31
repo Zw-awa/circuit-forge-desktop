@@ -4,6 +4,8 @@ import { overlayForcePassthrough, toolbarBumpOnTop } from './ipc/windowIpc';
 import { useCircuitStore } from './stores/circuitStore';
 import type { Component } from './stores/circuitStore';
 import { useSimStore, wireColor } from './stores/simStore';
+import { pushMove } from './stores/historyStore';
+import { useHistoryStore } from './stores/historyStore';
 import { Renderer } from './render/Renderer';
 import { ALL_GATES, GATE_LABEL } from './types/gates';
 import type { ComponentKind } from './types/components';
@@ -32,6 +34,8 @@ export default function DesktopOverlay() {
   const dragCompIdRef = useRef<number | null>(null);
   const dragOffXRef = useRef(0);
   const dragOffYRef = useRef(0);
+  const dragStartXRef = useRef(0);
+  const dragStartYRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -100,6 +104,17 @@ export default function DesktopOverlay() {
         if (id !== null) {
           useCircuitStore.getState().removeById(id);
         }
+        return;
+      }
+      if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) { useHistoryStore.getState().redo(); }
+        else { useHistoryStore.getState().undo(); }
+        return;
+      }
+      if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault();
+        useHistoryStore.getState().redo();
       }
     };
     window.addEventListener('keydown', onKey);
@@ -160,6 +175,8 @@ export default function DesktopOverlay() {
                 dragCompIdRef.current = id;
                 dragOffXRef.current = comp.x - wx;
                 dragOffYRef.current = comp.y - wy;
+                dragStartXRef.current = comp.x;
+                dragStartYRef.current = comp.y;
               }
             }
           }
@@ -196,6 +213,12 @@ export default function DesktopOverlay() {
         isPanningRef.current = false;
       }
       if (e.button === 0) {
+        if (isDraggingRef.current && dragCompIdRef.current !== null) {
+          const comp = useCircuitStore.getState().components.find((c) => c.id === dragCompIdRef.current);
+          if (comp && (comp.x !== dragStartXRef.current || comp.y !== dragStartYRef.current)) {
+            pushMove(dragCompIdRef.current, dragStartXRef.current, dragStartYRef.current, comp.x, comp.y);
+          }
+        }
         isDraggingRef.current = false;
         dragCompIdRef.current = null;
       }
@@ -230,6 +253,19 @@ export default function DesktopOverlay() {
       if (id !== null) { useCircuitStore.getState().removeById(id); }
     });
     return () => { p.then((u) => u()); };
+  }, []);
+
+  useEffect(() => {
+    const p = listen('overlay-pick-component', (event) => {
+      useCircuitStore.getState().setPlacingKind(event.payload as ComponentKind);
+    });
+    return () => { p.then((u) => u()); };
+  }, []);
+
+  useEffect(() => {
+    const u = listen('overlay-undo', () => { useHistoryStore.getState().undo(); });
+    const r = listen('overlay-redo', () => { useHistoryStore.getState().redo(); });
+    return () => { u.then((x) => x()); r.then((x) => x()); };
   }, []);
 
   const onPickGate = (kind: ComponentKind) => {

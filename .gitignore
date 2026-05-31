@@ -11,9 +11,6 @@ src-tauri/WixTools/
 src-tauri/Frameworks/
 
 # IDE
-.vscode/*
-!.vscode/extensions.json
-.idea/
 *.suo
 *.ntvs*
 *.njsproj
@@ -31,18 +28,6 @@ desktop.ini
 .env.*.local
 *.local
 
-# Claude Code
-.claude/
-
-# Personal notes
-entities.json
-mempalace.yaml
-
-# Internal design & handoff documents (not for public)
-HANDOFF.md
-docs/design/
-docs/TODO-future-plans.md
-
 # Backups
 backups/
 
@@ -54,4 +39,3 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-CLAUDE.md
